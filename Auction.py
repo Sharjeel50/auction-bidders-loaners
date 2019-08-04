@@ -7,18 +7,8 @@ class Parent:
         self.loan_id = loan_id
 
 # Inherit Parent to reduce code duplication
-
-
 class Loaner(Parent):
-    def __init__(
-            self,
-            timestamp,
-            user_id,
-            action,
-            loan_id,
-            credit,
-            reserve_rate,
-            close_time):
+    def __init__(self, timestamp, user_id, action, loan_id, credit, reserve_rate, close_time):
         super().__init__(timestamp, user_id, action, loan_id)
         self.credit = credit
         self.reserve_rate = reserve_rate
@@ -39,16 +29,7 @@ class Bidder(Parent):
 
 
 class Results:
-    def __init__(
-            self,
-            close_time,
-            loan_id,
-            user_id,
-            status,
-            rate,
-            total_bid_count,
-            highest_rate,
-            lowest_rate):
+    def __init__(self, close_time, loan_id, user_id, status, rate, total_bid_count, highest_rate, lowest_rate):
         self.close_time = close_time
         self.loan_id = loan_id
         self.user_id = user_id
@@ -83,26 +64,13 @@ class Auction:
             if len(i) < 20:  # Bidder / Bids
                 timestamp, user_id, action, loan_id, rate = i.split("|")
                 self._bidders.append(
-                    Bidder(
-                        timestamp,
-                        user_id,
-                        action,
-                        loan_id,
-                        rate))
+                    Bidder(timestamp, user_id, action, loan_id, rate))
                 self._bidders_original.append(
                     Bidder(timestamp, user_id, action, loan_id, rate))
             else:
-                timestamp, user_id, action, loan_id, credit, reserve_rate, close_time = i.split(
-                    "|")
+                timestamp, user_id, action, loan_id, credit, reserve_rate, close_time = i.split("|")
                 self._loaners.append(
-                    Loaner(
-                        timestamp,
-                        user_id,
-                        action,
-                        loan_id,
-                        credit,
-                        reserve_rate,
-                        close_time))
+                    Loaner(timestamp, user_id, action, loan_id, credit, reserve_rate, close_time))
 
         for i in self._loaners:
             self.auction_info[i.loan_id] = [
@@ -218,15 +186,7 @@ class Auction:
                         status = "UNSOLD"
 
         self._winners.append(
-            Results(
-                reserve_rate[1],
-                key,
-                user_id,
-                status,
-                rate,
-                total_bid_count,
-                max(all_bids),
-                min(all_bids)))  # Add winners to list and loop through to print them
+            Results(reserve_rate[1], key, user_id, status, rate, total_bid_count, max(all_bids), min(all_bids)))  # Add winners to list and loop through to print them
 
     def final_result_output(self):
         for i in self._winners:
